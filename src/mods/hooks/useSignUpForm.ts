@@ -1,4 +1,4 @@
-import { useCookie } from "@/mods/hooks/cookie"
+import { Cookie } from "@/mods/cookie"
 import { useToast } from "@/mods/hooks/useToast"
 import { SignUp } from "@/mods/repositories/auth"
 import type { SignUpRequest, SignUpSchemaType } from "@/types/auth/signup"
@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form"
 export const useSignUpForm = (orgId: string) => {
   const [loading, setLoading] = useState(false)
   const toast = useToast()
-  const cookie = useCookie()
+  const cookie = Cookie()
   const router = useRouter()
   const {
     control,

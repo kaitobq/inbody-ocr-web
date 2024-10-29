@@ -1,4 +1,4 @@
-import { useCookie } from "@/mods/hooks/cookie"
+import { Cookie } from "@/mods/cookie"
 import { useToast } from "@/mods/hooks/useToast"
 import { CreateOrganization } from "@/mods/repositories/auth"
 import type {
@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form"
 export const useCreateOrganizationForm = () => {
   const [loading, setLoading] = useState(false)
   const toast = useToast()
-  const cookie = useCookie()
+  const cookie = Cookie()
   const router = useRouter()
   const {
     control,
