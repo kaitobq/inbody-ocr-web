@@ -10,3 +10,5 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 next.config.js
+src/components/ui/*.tsx
+tailwind.config.ts
