@@ -1,17 +1,14 @@
 import { useCookie } from "@/mods/hooks/cookie"
 import { useToast } from "@/mods/hooks/useToast"
-import { CreateOrganization } from "@/mods/repositories/auth"
-import type {
-  CreateOrganizationRequest,
-  CreateOrganizationSchemaType,
-} from "@/types/auth/createOrganization"
-import { CreateOrganizationSchema } from "@/types/auth/createOrganization"
+import { SignUp } from "@/mods/repositories/auth"
+import type { SignUpRequest, SignUpSchemaType } from "@/types/auth/signup"
+import { SignUpSchema } from "@/types/auth/signup"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 
-export const useCreateOrganizationForm = () => {
+export const useSignUpForm = (orgId: string) => {
   const [loading, setLoading] = useState(false)
   const toast = useToast()
   const cookie = useCookie()
@@ -21,18 +18,16 @@ export const useCreateOrganizationForm = () => {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<CreateOrganizationSchemaType>({
-    resolver: zodResolver(CreateOrganizationSchema),
+  } = useForm<SignUpSchemaType>({
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
-      userName: "",
+      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
-      organizationName: "",
     },
   })
 
-  const onSubmit = async (data: CreateOrganizationSchemaType) => {
+  const onSubmit = async (data: SignUpSchemaType) => {
     setLoading(true)
 
     if (data.password !== data.confirmPassword) {
@@ -45,21 +40,18 @@ export const useCreateOrganizationForm = () => {
     }
 
     try {
-      const req: CreateOrganizationRequest = {
-        userName: data.userName,
+      const req: SignUpRequest = {
+        name: data.name,
         email: data.email,
         password: data.password,
-        organizationName: data.organizationName,
       }
-      const res = await CreateOrganization(req)
+      const res = await SignUp(orgId, req)
       cookie.set("token", res.token.value)
-      toast.success("組織を作成しました。")
-      router.push(
-        `/dashboard?organization_id=${res.organization_id}&role=${res.user.role}`,
-      )
+      toast.success("ユーザーを作成しました。")
+      router.push(`/dashboard?organization_id=${orgId}&role=${res.user.role}`)
     } catch (error) {
       console.error(error)
-      toast.error("エラーが発生しました。")
+      toast.error("ユーザーの作成に失敗しました。")
     } finally {
       setLoading(false)
     }

@@ -4,6 +4,7 @@ import type {
   CreateOrganizationResponse,
 } from "@/types/auth/createOrganization"
 import type { SignInRequest, SignInResponse } from "@/types/auth/signin"
+import type { SignUpRequest, SignUpResponse } from "@/types/auth/signup"
 
 export const SignIn = async (req: SignInRequest) => {
   const apiFetcher = fetcher()
@@ -17,16 +18,29 @@ export const SignIn = async (req: SignInRequest) => {
   })
 }
 
+export const SignUp = async (orgId: string, req: SignUpRequest) => {
+  const apiFetcher = fetcher()
+  return await apiFetcher.fetchJSON<SignUpResponse>({
+    path: `/v1/organization/${orgId}/signup`,
+    method: "POST",
+    body: {
+      name: req.name,
+      email: req.email,
+      password: req.password,
+    },
+  })
+}
+
 export const CreateOrganization = async (req: CreateOrganizationRequest) => {
   const apiFetcher = fetcher()
   return await apiFetcher.fetchJSON<CreateOrganizationResponse>({
     path: "/v1/organization",
     method: "POST",
     body: {
-      userName: req.userName,
+      user_name: req.userName,
       email: req.email,
       password: req.password,
-      organizationName: req.organizationName,
+      organization_name: req.organizationName,
     },
   })
 }

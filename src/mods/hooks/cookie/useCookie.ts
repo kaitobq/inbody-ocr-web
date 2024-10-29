@@ -8,7 +8,7 @@ export const setCookie = async (key: string, value: string, expires?: Date) => {
     secure: process.env.NODE_ENV === "production",
     path: "/",
     sameSite: "strict",
-    expires: expires,
+    expires,
   })
 }
 
