@@ -15,3 +15,5 @@ tsconfig.json
 src/env.d.ts
 *.cjs
 *.mjs
+src/components/ui/*.tsx
+tailwind.config.ts
