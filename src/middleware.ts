@@ -10,7 +10,12 @@ type Resp = {
   }
 }
 
-const PUBLIC_PATHS = ["/signin", "/signup", "/"]
+const PUBLIC_PATHS = [
+  /^\/signin$/,
+  /^\/signup$/,
+  /^\/organization\/[^/]+\/signup$/,
+  /^\/$/,
+]
 
 async function verifyToken(token: string) {
   const apiFetcher = fetcher()
@@ -34,7 +39,8 @@ export async function middleware(request: NextRequest) {
   const token = (await cookieStore).get("token")
   const path = request.nextUrl.pathname
 
-  if (PUBLIC_PATHS.includes(path)) {
+  const isPublicPath = PUBLIC_PATHS.some((pattern) => pattern.test(path))
+  if (isPublicPath) {
     return NextResponse.next()
   }
 
@@ -45,10 +51,6 @@ export async function middleware(request: NextRequest) {
   const isValidToken = await verifyToken(token.value)
   if (!isValidToken) {
     return NextResponse.redirect(new URL("/signin", request.url))
-  }
-
-  if (PUBLIC_PATHS.includes(path)) {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   return NextResponse.next()

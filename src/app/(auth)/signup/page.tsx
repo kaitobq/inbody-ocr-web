@@ -1,3 +1,9 @@
+import { CreateOrganizationForm } from "@/components/auth/CreateOrganizationForm"
+
 export default function SignUp() {
-  return <div>SignUp</div>
+  return (
+    <div>
+      <CreateOrganizationForm />
+    </div>
+  )
 }
