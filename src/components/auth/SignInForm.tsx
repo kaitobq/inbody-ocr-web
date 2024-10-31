@@ -5,7 +5,7 @@ import { useSignInForm } from "@/mods/hooks/useSignInForm"
 import { Controller } from "react-hook-form"
 
 export const SignInForm = () => {
-  const { control, errors, loading, handleSubmit, onSubmit } = useSignInForm()
+  const { control, errors, isLoading, handleSubmit, onSubmit } = useSignInForm()
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="m-3 space-y-4">
@@ -46,8 +46,8 @@ export const SignInForm = () => {
           <p className="text-xs text-red-500">{errors.password.message}</p>
         )}
       </div>
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "ロード中..." : "サインイン"}
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "ロード中..." : "サインイン"}
       </Button>
     </form>
   )

@@ -8,7 +8,7 @@ import { Controller } from "react-hook-form"
 export const SignUpForm = () => {
   const { id } = useParams()
   const orgId = id as string
-  const { loading, control, handleSubmit, errors, onSubmit } =
+  const { control, errors, isLoading, handleSubmit, onSubmit } =
     useSignUpForm(orgId)
 
   return (
@@ -88,8 +88,8 @@ export const SignUpForm = () => {
       {errors.confirmPassword && (
         <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
       )}
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "ロード中..." : "サインアップ"}
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "ロード中..." : "サインアップ"}
       </Button>
     </form>
   )

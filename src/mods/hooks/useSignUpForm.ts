@@ -1,3 +1,4 @@
+import { useLoading } from "@/components/common/LoadingContext"
 import { Cookie } from "@/mods/cookie"
 import { useToast } from "@/mods/hooks/useToast"
 import { SignUp } from "@/mods/repositories/auth"
@@ -5,11 +6,10 @@ import type { SignUpRequest, SignUpSchemaType } from "@/types/auth/signup"
 import { SignUpSchema } from "@/types/auth/signup"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 export const useSignUpForm = (orgId: string) => {
-  const [loading, setLoading] = useState(false)
+  const { isLoading, setLoading } = useLoading()
   const toast = useToast()
   const cookie = Cookie()
   const router = useRouter()
@@ -46,7 +46,7 @@ export const useSignUpForm = (orgId: string) => {
         password: data.password,
       }
       const res = await SignUp(orgId, req)
-      cookie.set("token", res.token.value)
+      await cookie.set("token", res.token.value)
       toast.success("ユーザーを作成しました。")
       router.push(`/dashboard?organization_id=${orgId}&role=${res.user.role}`)
     } catch (error) {
@@ -57,5 +57,5 @@ export const useSignUpForm = (orgId: string) => {
     }
   }
 
-  return { control, errors, loading, handleSubmit, onSubmit }
+  return { control, errors, isLoading, handleSubmit, onSubmit }
 }
