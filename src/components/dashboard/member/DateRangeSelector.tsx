@@ -1,3 +1,5 @@
+"use client" // なぜかないとエラーが起きる
+
 import { Button, Input, Label } from "@/components/ui"
 import { useEffect, useState } from "react"
 
