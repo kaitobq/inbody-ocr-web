@@ -11,7 +11,7 @@ export default function Dashboard(props: Props) {
   if (role !== "member" && role !== "admin" && role !== "owner") {
     notFound()
   }
-  console.log(role)
+
   return (
     <div>
       {role === "member" ? <MemberDashboardContainer /> : <div>admin</div>}

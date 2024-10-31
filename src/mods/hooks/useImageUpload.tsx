@@ -9,13 +9,15 @@ export const useImageUpload = () => {
   const [loading, setLoading] = useState(false)
   const [analyzedData, setAnalyzedData] = useState<AnalyzedData | null>(null)
   const cookie = Cookie()
-  const showToast = useToast()
+  const toast = useToast()
   const router = useRouter()
 
   const analyze = async (file: File) => {
     const token = await cookie.get("token")
     if (!token) {
       console.error("トークンが見つかりません")
+      toast.error("認証情報が見つかりません")
+      router.push("/signin")
       return
     }
 
@@ -24,7 +26,8 @@ export const useImageUpload = () => {
       const res = await AnalyzeImage(token, file)
       setAnalyzedData(res?.results || null)
     } catch (error) {
-      console.error("エラーが発生しました:", error)
+      console.error(error)
+      toast.error("画像の解析に失敗しました")
       setAnalyzedData(null)
     } finally {
       setLoading(false)
@@ -35,18 +38,20 @@ export const useImageUpload = () => {
     const token = await cookie.get("token")
     if (!token) {
       console.error("トークンが見つかりません")
+      toast.error("認証情報が見つかりません")
+      router.push("/signin")
       return
     }
 
     try {
       setLoading(true)
-      const res = await PostAnalyzedData(token, data)
-      console.log("データ送信成功:", res)
+      await PostAnalyzedData(token, data)
       setAnalyzedData(null)
-      showToast.success("データの登録に成功しました")
+      toast.success("データの登録に成功しました")
       router.refresh()
     } catch (error) {
-      console.error("エラーが発生しました:", error)
+      console.error(error)
+      toast.error("データの登録に失敗しました")
     } finally {
       setLoading(false)
     }
