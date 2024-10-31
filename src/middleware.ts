@@ -7,6 +7,11 @@ type Resp = {
   verify: {
     status: number
     message: string
+    user: {
+      id: string
+      name: string
+      role: string
+    }
   }
 }
 
@@ -22,16 +27,15 @@ async function verifyToken(token: string) {
   try {
     const response = await apiFetcher.fetchJSON<Resp["verify"]>({
       path: "/v1/user/authenticate",
-      method: "POST",
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      body: {},
     })
-    return response.status === 200
+    return response.user
   } catch (error) {
     console.error(error)
-    return false
+    return null
   }
 }
 
@@ -49,9 +53,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/signin", request.url))
   }
 
-  const isValidToken = await verifyToken(token.value)
-  if (!isValidToken) {
+  const user = await verifyToken(token.value)
+  if (!user) {
     return NextResponse.redirect(new URL("/signin", request.url))
+  }
+
+  if (path === "/dashboard") {
+    if (user.role === "admin") {
+      return NextResponse.redirect(new URL("/dashboard/admin", request.url))
+    } else if (user.role === "member") {
+      return NextResponse.redirect(new URL("/dashboard/member", request.url))
+    } else {
+      return NextResponse.redirect(new URL("/signin", request.url))
+    }
   }
 
   return NextResponse.next()
