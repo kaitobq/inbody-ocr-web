@@ -54,9 +54,7 @@ export const useCreateOrganizationForm = () => {
       const res = await CreateOrganization(req)
       await cookie.set("token", res.token.value)
       toast.success("組織を作成しました。")
-      router.push(
-        `/dashboard?organization_id=${res.organization_id}&role=${res.user.role}`,
-      )
+      router.push(`/dashboard/${res.user.role}`)
     } catch (error) {
       console.error(error)
       toast.error("エラーが発生しました。")
