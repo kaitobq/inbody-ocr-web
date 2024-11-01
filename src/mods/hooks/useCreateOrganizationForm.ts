@@ -1,4 +1,5 @@
-import { useCookie } from "@/mods/hooks/cookie"
+import { useLoading } from "@/components/common/LoadingContext"
+import { Cookie } from "@/mods/cookie"
 import { useToast } from "@/mods/hooks/useToast"
 import { CreateOrganization } from "@/mods/repositories/auth"
 import type {
@@ -8,13 +9,12 @@ import type {
 import { CreateOrganizationSchema } from "@/types/auth/createOrganization"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 export const useCreateOrganizationForm = () => {
-  const [loading, setLoading] = useState(false)
+  const { isLoading, setLoading } = useLoading()
   const toast = useToast()
-  const cookie = useCookie()
+  const cookie = Cookie()
   const router = useRouter()
   const {
     control,
@@ -52,7 +52,7 @@ export const useCreateOrganizationForm = () => {
         organizationName: data.organizationName,
       }
       const res = await CreateOrganization(req)
-      cookie.set("token", res.token.value)
+      await cookie.set("token", res.token.value)
       toast.success("組織を作成しました。")
       router.push(
         `/dashboard?organization_id=${res.organization_id}&role=${res.user.role}`,
@@ -65,5 +65,5 @@ export const useCreateOrganizationForm = () => {
     }
   }
 
-  return { control, errors, loading, handleSubmit, onSubmit }
+  return { control, errors, isLoading, handleSubmit, onSubmit }
 }

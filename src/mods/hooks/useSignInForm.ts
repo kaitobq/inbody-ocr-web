@@ -1,17 +1,17 @@
-import { useCookie } from "@/mods/hooks/cookie"
+import { useLoading } from "@/components/common/LoadingContext"
+import { Cookie } from "@/mods/cookie"
 import { useToast } from "@/mods/hooks/useToast"
 import { SignIn } from "@/mods/repositories/auth"
 import type { SignInRequest, SignInSchemaType } from "@/types/auth/signin"
 import { SignInSchema } from "@/types/auth/signin"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 
 export const useSignInForm = () => {
-  const [loading, setLoading] = useState(false)
+  const { isLoading, setLoading } = useLoading()
   const router = useRouter()
-  const cookie = useCookie()
+  const cookie = Cookie()
   const toast = useToast()
   const {
     control,
@@ -33,7 +33,7 @@ export const useSignInForm = () => {
         password: data.password,
       }
       const res = await SignIn(req)
-      cookie.set("token", res.token.value)
+      await cookie.set("token", res.token.value)
       toast.success("サインインしました。")
       router.push(
         `/dashboard?organization_id=${res.organization_id}&role=${res.user.role}`,
@@ -46,5 +46,5 @@ export const useSignInForm = () => {
     }
   }
 
-  return { control, errors, loading, handleSubmit, onSubmit }
+  return { control, errors, isLoading, handleSubmit, onSubmit }
 }

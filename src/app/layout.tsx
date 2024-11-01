@@ -1,3 +1,5 @@
+import { LoadingProvider } from "@/components/common/LoadingContext"
+import LoadingOverlay from "@/components/common/LoadingOverlay"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { Toaster } from "react-hot-toast"
@@ -29,8 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Toaster />
-        {children}
+        <LoadingProvider>
+          <Toaster />
+          <LoadingOverlay />
+          {children}
+        </LoadingProvider>
       </body>
     </html>
   )

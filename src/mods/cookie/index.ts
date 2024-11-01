@@ -1,6 +1,6 @@
-import { deleteCookie, getCookie, setCookie } from "./useCookie"
+import { deleteCookie, getCookie, setCookie } from "./Cookie"
 
-export const useCookie = () => {
+export const Cookie = () => {
   const set = setCookie
   const get = getCookie
   const del = deleteCookie

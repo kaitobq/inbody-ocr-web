@@ -5,7 +5,7 @@ import { useCreateOrganizationForm } from "@/mods/hooks/useCreateOrganizationFor
 import { Controller } from "react-hook-form"
 
 export const CreateOrganizationForm = () => {
-  const { control, errors, loading, handleSubmit, onSubmit } =
+  const { control, errors, isLoading, handleSubmit, onSubmit } =
     useCreateOrganizationForm()
 
   return (
@@ -107,8 +107,8 @@ export const CreateOrganizationForm = () => {
           </p>
         )}
       </div>
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "ロード中..." : "サインアップ"}
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "ロード中..." : "サインアップ"}
       </Button>
     </form>
   )
