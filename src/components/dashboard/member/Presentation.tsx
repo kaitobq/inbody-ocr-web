@@ -25,6 +25,21 @@ export const Presentation = (props: Props) => {
   }
   setLoading(false)
 
+  const stats = genStatsProps(data)
+
+  return (
+    <div className="container mx-auto p-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Stats stats={stats} />
+      </div>
+      <CustomLineChart data={data} />
+      <DataHistoryTable data={data} />
+      {children}
+    </div>
+  )
+}
+
+const genStatsProps = (data: GetMemberDashboardDataResponse) => {
   const userIcon = <User className="size-4 text-muted-foreground" />
   const stats: StatCardProps[] = [
     {
@@ -47,14 +62,5 @@ export const Presentation = (props: Props) => {
     },
   ]
 
-  return (
-    <div className="container mx-auto p-4">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Stats stats={stats} />
-      </div>
-      <CustomLineChart data={data} />
-      <DataHistoryTable data={data} />
-      {children}
-    </div>
-  )
+  return stats
 }
