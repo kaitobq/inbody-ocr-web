@@ -1,6 +1,10 @@
 "use client"
 
 import { useLoading } from "@/components/common/LoadingContext"
+import { ScoreRanking } from "@/components/dashboard/admin/ScoreRanking"
+import { UserDataChart } from "@/components/dashboard/admin/UserDataChart"
+import { UserDistributionChart } from "@/components/dashboard/admin/UserDistributionChart"
+import { UsersTable } from "@/components/dashboard/admin/UsersTable"
 import { Stats, type StatCardProps } from "@/components/dashboard/common"
 import type { GetAdminDashboardDataResponse } from "@/types/dashboard/member"
 import { Users } from "lucide-react"
@@ -27,6 +31,10 @@ export const Presentation = (props: Props) => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Stats stats={stats} />
       </div>
+      <UserDistributionChart data={data.chart} />
+      <UsersTable data={data.current} />
+      <ScoreRanking data={data.current} />
+      <UserDataChart data={data.all_data} />
       {children}
     </div>
   )
