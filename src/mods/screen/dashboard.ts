@@ -1,6 +1,7 @@
 import { Cookie } from "@/mods/cookie"
 import {
   AnalyzeImage,
+  GetAdminDashboardData,
   GetMemberDashboardData,
   PostAnalyzedData,
 } from "@/mods/repositories/dashboard"
@@ -14,6 +15,17 @@ export const getDataForMember = async () => {
   }
 
   const data = await GetMemberDashboardData(token)
+  return data
+}
+
+export const getDataForAdmin = async () => {
+  const cookie = Cookie()
+  const token = await cookie.get("token")
+  if (!token) {
+    return
+  }
+
+  const data = await GetAdminDashboardData(token)
   return data
 }
 
