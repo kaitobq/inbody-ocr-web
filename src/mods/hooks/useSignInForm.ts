@@ -35,9 +35,7 @@ export const useSignInForm = () => {
       const res = await SignIn(req)
       await cookie.set("token", res.token.value)
       toast.success("サインインしました。")
-      router.push(
-        `/dashboard?organization_id=${res.organization_id}&role=${res.user.role}`,
-      )
+      router.push(`/dashboard/${res.user.role}`)
     } catch (e) {
       console.error(e)
       toast.error("サーバーエラーが発生しました。")

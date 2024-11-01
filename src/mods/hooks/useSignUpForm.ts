@@ -48,7 +48,7 @@ export const useSignUpForm = (orgId: string) => {
       const res = await SignUp(orgId, req)
       await cookie.set("token", res.token.value)
       toast.success("ユーザーを作成しました。")
-      router.push(`/dashboard?organization_id=${orgId}&role=${res.user.role}`)
+      router.push(`/dashboard/${res.user.role}`)
     } catch (error) {
       console.error(error)
       toast.error("ユーザーの作成に失敗しました。")

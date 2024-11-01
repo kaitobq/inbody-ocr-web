@@ -40,14 +40,15 @@ async function verifyToken(token: string) {
 }
 
 export async function middleware(request: NextRequest) {
-  const cookieStore = cookies()
-  const token = (await cookieStore).get("token")
   const path = request.nextUrl.pathname
 
   const isPublicPath = PUBLIC_PATHS.some((pattern) => pattern.test(path))
   if (isPublicPath) {
     return NextResponse.next()
   }
+
+  const cookieStore = cookies()
+  const token = (await cookieStore).get("token")
 
   if (!token) {
     return NextResponse.redirect(new URL("/signin", request.url))
@@ -58,14 +59,26 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/signin", request.url))
   }
 
-  if (path === "/dashboard") {
-    if (user.role === "admin") {
-      return NextResponse.redirect(new URL("/dashboard/admin", request.url))
-    } else if (user.role === "member") {
-      return NextResponse.redirect(new URL("/dashboard/member", request.url))
-    } else {
-      return NextResponse.redirect(new URL("/signin", request.url))
-    }
+  if (path === `/dashboard/${user.role}`) {
+    return NextResponse.next()
+  }
+
+  if (path === "/dashboard/member" && user.role !== "member") {
+    return NextResponse.redirect(
+      new URL(`/dashboard/${user.role}`, request.url),
+    )
+  }
+
+  if (path === "/dashboard/admin" && user.role !== "admin") {
+    return NextResponse.redirect(
+      new URL(`/dashboard/${user.role}`, request.url),
+    )
+  }
+
+  if (path === "/dashboard/owner" && user.role !== "owner") {
+    return NextResponse.redirect(
+      new URL(`/dashboard/${user.role}`, request.url),
+    )
   }
 
   return NextResponse.next()
