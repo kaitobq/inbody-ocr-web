@@ -57,6 +57,25 @@ export type GetMemberDashboardDataResponse = {
   history: ImageData[]
 }
 
+export type GetAdminDashboardDataResponse = {
+  status: number
+  message: string
+  avg: {
+    weight: number
+    muscle_weight: number
+    fat_percent: number
+    point: number
+  }
+  chart: {
+    bmi: { [key: string]: number }
+    weight: { [key: string]: number }
+    muscle_weight: { [key: string]: number }
+    fat_percent: { [key: string]: number }
+  }
+  current: ImageData[]
+  all_data: ImageData[]
+}
+
 export type AnalyzedData = {
   height: number
   weight: number
