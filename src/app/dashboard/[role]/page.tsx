@@ -1,3 +1,4 @@
+import { AdminDashboardContainer } from "@/components/dashboard/admin"
 import { MemberDashboardContainer } from "@/components/dashboard/member"
 import { notFound } from "next/navigation"
 import { use } from "react"
@@ -14,7 +15,11 @@ export default function Dashboard(props: Props) {
 
   return (
     <div>
-      {role === "member" ? <MemberDashboardContainer /> : <div>admin</div>}
+      {role === "member" ? (
+        <MemberDashboardContainer />
+      ) : (
+        <AdminDashboardContainer />
+      )}
     </div>
   )
 }
